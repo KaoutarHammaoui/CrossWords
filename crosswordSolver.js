@@ -1,10 +1,9 @@
 const emptyPuzzle = `2001
 0..0
-1001
+1000
 0..0`
-
 function crosswordSolver(Puzzle,words){
-    if (typeof Puzzle != "string" && Puzzle == ""){
+    if (typeof Puzzle != "string" || Puzzle == ""){
         return "Error"
     }
     if (!Array.isArray(words) ){
@@ -14,7 +13,7 @@ function crosswordSolver(Puzzle,words){
 
     let StartIndexesWords = IndexOfFirstEmpty(Matrix);
     if(StartIndexesWords === "Error"){
-        return StartIndexesWords;
+        return StartIndexesWords +" 1";
     }
     let res = CreateMatrixFromWords(Matrix,StartIndexesWords, words);
     if (res === "Error"){
@@ -29,57 +28,62 @@ function CreateMatrix(puzzle){
 }
 function CreateMatrixFromWords(Matrix,StartIndexesWords, words){
 }
+
+const F = (Y, X, matrix) => {
+    let arrYX = []
+
+    let vertical = (Y === 0 || matrix[Y - 1][X] === ".") && (Y + 1 < matrix.length && matrix[Y + 1][X] !== ".")
+
+    let horizontal = (X === 0 || matrix[Y][X - 1] === ".") && (X + 1 < matrix[Y].length && matrix[Y][X + 1] !== ".")
+
+    arrYX.push(vertical)
+    arrYX.push(horizontal)
+
+    return arrYX
+}
+function test(){
+
+}
 function IndexOfFirstEmpty(matrix){
-    let regex = /[^0-9.]/;
-    let arr = [];
+    let matrixLength = matrix[0].length
+    let regex = /[^0-9.]/
+    let arr = []
     let id = 0
+
     for(let i = 0; i < matrix.length; i++){
+        if (matrix[i].length !== matrixLength){
+            return "Error"
+        }
         for(let j = 0; j < matrix[i].length; j++){
-            if(matrix[i][j].match(regex) != null){
-                return "Error";
+            if(matrix[i][j].match(regex) !== null){
+                            console.log(2);
+
+                return "Error"
             }
-            if(matrix[i][j] === '.' || matrix[i][j] === '0'){
-                continue;
+
+            if(matrix[i][j] === "." || matrix[i][j] === "0"){
+                continue
+            }
+
+            let tableBool = F(i, j, matrix)
+            let countStarts = tableBool.filter((value) => value === true).length
+            if (Number(matrix[i][j]) !== countStarts) {
+                return "Error"
             }
 
             arr.push({
                 Value: Number(matrix[i][j]),
-                ID:++id,
+                ID: ++id,
                 Y: i,
                 X: j,
-                LineY: Number(matrix[i][j]) > 1?matrix.length:1,
-                LineX: matrix[i].length,
-                F:() =>{
-                    let arrYX = []
-                    if (this.LineY != 1 && this.LineY != matrix.length){
-                        if (matrix[this.Y+1][this.X] != "0"){
-                            arrYX.push(false)
-                        }else{
-                            arrYX.push(true)
-                        }
-                    }else{
-                        arrYX.push(false)
-                    }
-                    if (this.LineX != matrix.length[i]){
-                        if (matrix[this.Y][this.X+1] != "0"){
-                            arrYX.push(false)
-                        }else{
-                            arrYX.push(true)
-                        }
-                    }else{
-                        arrYX.push(false)
-                    }
-                    return arrYX
-                }
-
-            });
-            let tableBool = arr[arr.length-1].F()
-            if(tableBool[0] == false && tableBool[1] == false){
-                return "Error"
-            }
+                Vertical: tableBool[0],
+                Horizontal: tableBool[1]
+            })
         }
     }
-    return arr;
+
+    return arr
 }
 
-console.log(CreateMatrix(emptyPuzzle))
+const words = ['casa', 'alan', 'ciao', 'anta']
+console.log(crosswordSolver(emptyPuzzle,words))
