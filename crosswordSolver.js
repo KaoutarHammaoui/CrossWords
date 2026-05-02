@@ -1,11 +1,17 @@
-const emptyPuzzle = `
-2001
+const emptyPuzzle = `2001
 0..0
 1001
 0..0`
 
 function crosswordSolver(Puzzle,words){
+    if (typeof Puzzle != "string" && Puzzle == ""){
+        return "Error"
+    }
+    if (!Array.isArray(words) ){
+        return "Error"
+    }
     let Matrix = CreateMatrix(Puzzle)
+
     let StartIndexesWords = IndexOfFirstEmpty(Matrix);
     if(StartIndexesWords === "Error"){
         return StartIndexesWords;
@@ -19,12 +25,7 @@ function crosswordSolver(Puzzle,words){
 }
 
 function CreateMatrix(puzzle){
-    puzzle = puzzle.split('\n');
-    let matrix = [];
-    for(let i = 0; i < puzzle.length; i++){
-        matrix.push(puzzle[i].split(''));
-    }
-    return matrix;
+    return puzzle.split('\n').map(ele => [...ele]);
 }
 function CreateMatrixFromWords(Matrix,StartIndexesWords, words){
 }
@@ -80,3 +81,5 @@ function IndexOfFirstEmpty(matrix){
     }
     return arr;
 }
+
+console.log(CreateMatrix(emptyPuzzle))
