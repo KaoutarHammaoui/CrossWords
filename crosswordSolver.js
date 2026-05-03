@@ -159,7 +159,7 @@ function buildSlots(matrix, starts) {
 
 // ---------------- FINAL BACKTRACKING FUNCTION ----------------
 function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {
-  let slot = buildSlots(Matrix, StartIndexesWords);
+  let slots = buildSlots(Matrix, StartIndexesWords);
 
   if (slots.length !== words.length) {
     return "Error";
@@ -193,6 +193,19 @@ function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {
       return;
     }
 
+    let slot = slots[slotIndex];
+
+    for (let i = 0; i < words.length; i++) {
+      if (!usedWords[i] && words[i].length === slot.length) {
+        let backup = placeWord(Matrix, slot.Y, slot.X, words[i], slot.direction);
+        if (backup !== false) {
+          usedWords[i] = true;
+          solve(slotIndex + 1);
+          usedWords[i] = false;
+          removeWord(Matrix, slot.Y, slot.X, backup, slot.direction);
+        }
+      }
+    }
   }
   solve(0);
 
