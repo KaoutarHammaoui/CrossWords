@@ -2,6 +2,7 @@ const emptyPuzzle = `2001
 0..0
 1000
 0..0`;
+
 function crosswordSolver(Puzzle, words) {
   if (typeof Puzzle != "string" || Puzzle == "") {
     return "Error";
@@ -26,7 +27,6 @@ function crosswordSolver(Puzzle, words) {
 function CreateMatrix(puzzle) {
   return puzzle.split("\n").map((ele) => [...ele]);
 }
-function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {}
 
 const F = (Y, X, matrix) => {
   let arrYX = [];
@@ -46,7 +46,9 @@ const F = (Y, X, matrix) => {
 
   return arrYX;
 };
-function test() {}
+
+// function test() {}
+
 function IndexOfFirstEmpty(matrix) {
   let matrixLength = matrix[0].length;
   let regex = /[^0-9.]/;
@@ -111,7 +113,8 @@ function placeWord(matrix, Y, X, word, direction) {
     let cy = direction === "vertical" ? Y + i : Y;
     let cx = direction === "horizontal" ? X + i : X;
     backup.push(matrix[cy][cx]);
-    if (matrix[cy][cx] !== "0" && matrix[cy][cx] !== word[i]) {
+    // haitbenal : I changed this line bz this allow to place a letter if cell  == 0 or its match
+    if (!(matrix[cy][cx] >= "0" && matrix[cy][cx] <= "9") && matrix[cy][cx] !== word[i]) {
       for (let k = 0; k < backup.length; k++) {
         let ky = direction === "vertical" ? Y + k : Y;
         let kx = direction === "horizontal" ? X + k : X;
@@ -154,5 +157,66 @@ function buildSlots(matrix, starts) {
   }
   return slots;
 }
+
+// ---------------- FINAL BACKTRACKING FUNCTION ----------------
+function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {
+  let slots = buildSlots(Matrix, StartIndexesWords);
+
+  if (slots.length !== words.length) {
+    return "Error";
+  }
+
+  let usedWords = new Array(words.length).fill(false);
+  let solutions = [];
+  let uniqueGrids = new Set();
+
+  function solve(slotIndex) {
+    if (solutions.length > 1) return;
+    if (slotIndex === slots.length) {
+      let isFinished = true;
+      for (let r = 0; r < Matrix.length; r++) {
+        for (let c = 0; c < Matrix[r].length; c++) {
+          if (Matrix[r][c] >= "0" && Matrix[r][c] <= "9") {
+            isFinished = false;
+            break;
+          }
+        }
+        if (!isFinished) break;
+      }
+
+      if (isFinished) {
+        let str = Matrix.map((row) => row.join("")).join("\n");
+        if (!uniqueGrids.has(str)) {
+          uniqueGrids.add(str);
+          solutions.push(Matrix.map((row) => [...row]));
+        }
+      }
+      return;
+    }
+
+    let slot = slots[slotIndex];
+
+    for (let i = 0; i < words.length; i++) {
+      if (!usedWords[i] && words[i].length === slot.length) {
+        let backup = placeWord(Matrix, slot.Y, slot.X, words[i], slot.direction);
+        if (backup !== false) {
+          usedWords[i] = true;
+          solve(slotIndex + 1);
+          usedWords[i] = false;
+          removeWord(Matrix, slot.Y, slot.X, backup, slot.direction);
+        }
+      }
+    }
+  }
+  solve(0);
+
+  if (solutions.length !== 1) {
+    return "Error";
+  }
+
+  return solutions[0];
+}
+
+
 const words = ["casa", "alan", "ciao", "anta"];
 console.log(crosswordSolver(emptyPuzzle, words));
