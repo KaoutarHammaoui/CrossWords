@@ -1,4 +1,5 @@
-
+const puzzle = '2001\n0..0\n1000\n0..0'
+const words = ['aaab', 'aaac', 'aaad', 'aaae']
 /// The Main function
 function crosswordSolver(Puzzle, words) {
   if (typeof Puzzle != "string" || Puzzle == "") {
@@ -33,7 +34,7 @@ function crosswordSolver(Puzzle, words) {
   res = res.map((row) => row.join("")).join("\n");
   console.log(res);
 }
-
+// ---------------- start part melbouzi ----------------
 function CreateMatrix(puzzle) {
   return puzzle.split("\n").map((ele) => [...ele]);
 }
@@ -57,11 +58,9 @@ const F = (Y, X, matrix) => {
   return arrYX;
 };
 
-// function test() {}
-
 function IndexOfFirstEmpty(matrix) {
   let matrixLength = matrix[0].length;
-  let regex = /[^0-9.]/;
+  let regex = /[^0-2.]/;
   let arr = [];
   let id = 0;
 
@@ -71,8 +70,6 @@ function IndexOfFirstEmpty(matrix) {
     }
     for (let j = 0; j < matrix[i].length; j++) {
       if (matrix[i][j].match(regex) !== null) {
-        console.log(2);
-
         return "Error";
       }
 
@@ -99,6 +96,8 @@ function IndexOfFirstEmpty(matrix) {
 
   return arr;
 }
+
+// ---------------- End part melbouzi ----------------
 
 //guys these functions are for placing wordds into the matrix
 function getWordLength(matrix, Y, X, direction) {
@@ -226,3 +225,5 @@ function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {
 
   return solutions[0];
 }
+
+crosswordSolver(puzzle,words);
