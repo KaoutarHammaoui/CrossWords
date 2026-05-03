@@ -2,24 +2,36 @@
 /// The Main function
 function crosswordSolver(Puzzle, words) {
   if (typeof Puzzle != "string" || Puzzle == "") {
-    return "Error";
+    console.log("Error");
+    return
   }
+
   if (!Array.isArray(words)) {
-    return "Error";
+    console.log("Error");
+    return
   }
+
   let Matrix = CreateMatrix(Puzzle);
 
   let StartIndexesWords = IndexOfFirstEmpty(Matrix);
   if (StartIndexesWords === "Error") {
-    return StartIndexesWords + " 1";
+    console.log("Error");
+    return
   }
+
   let res = CreateMatrixFromWords(Matrix, StartIndexesWords, words);
   if (res === "Error") {
-    return res;
+    console.log("Error");
+    return
   }
+
+  if (res.length === 0) {
+    console.log("Error");
+    return
+  }
+
   res = res.map((row) => row.join("")).join("\n");
   console.log(res);
-  //return res;
 }
 
 function CreateMatrix(puzzle) {
