@@ -2,6 +2,7 @@ const emptyPuzzle = `2001
 0..0
 1000
 0..0`;
+
 function crosswordSolver(Puzzle, words) {
   if (typeof Puzzle != "string" || Puzzle == "") {
     return "Error";
@@ -26,6 +27,7 @@ function crosswordSolver(Puzzle, words) {
 function CreateMatrix(puzzle) {
   return puzzle.split("\n").map((ele) => [...ele]);
 }
+
 function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {}
 
 const F = (Y, X, matrix) => {
@@ -46,7 +48,9 @@ const F = (Y, X, matrix) => {
 
   return arrYX;
 };
-function test() {}
+
+// function test() {}
+
 function IndexOfFirstEmpty(matrix) {
   let matrixLength = matrix[0].length;
   let regex = /[^0-9.]/;
@@ -154,5 +158,8 @@ function buildSlots(matrix, starts) {
   }
   return slots;
 }
+
+// ---------------- FINAL BACKTRACKING FUNCTION ----------------
+
 const words = ["casa", "alan", "ciao", "anta"];
 console.log(crosswordSolver(emptyPuzzle, words));
