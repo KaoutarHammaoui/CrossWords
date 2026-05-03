@@ -113,7 +113,8 @@ function placeWord(matrix, Y, X, word, direction) {
     let cy = direction === "vertical" ? Y + i : Y;
     let cx = direction === "horizontal" ? X + i : X;
     backup.push(matrix[cy][cx]);
-    if (matrix[cy][cx] !== "0" && matrix[cy][cx] !== word[i]) {
+    // haitbenal : I changed this line bz this allow to place a letter if cell  == 0 or its match
+    if (!(matrix[cy][cx] >= "0" && matrix[cy][cx] <= "9") && matrix[cy][cx] !== word[i]) {
       for (let k = 0; k < backup.length; k++) {
         let ky = direction === "vertical" ? Y + k : Y;
         let kx = direction === "horizontal" ? X + k : X;
