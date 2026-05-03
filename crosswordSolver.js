@@ -28,8 +28,6 @@ function CreateMatrix(puzzle) {
   return puzzle.split("\n").map((ele) => [...ele]);
 }
 
-function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {}
-
 const F = (Y, X, matrix) => {
   let arrYX = [];
 
@@ -160,6 +158,51 @@ function buildSlots(matrix, starts) {
 }
 
 // ---------------- FINAL BACKTRACKING FUNCTION ----------------
+function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {
+  let slot = buildSlots(Matrix, StartIndexesWords);
+
+  if (slots.length !== words.length) {
+    return "Error";
+  }
+
+  let usedWords = new Array(words.length).fill(false);
+  let solutions = [];
+  let uniqueGrids = new Set();
+
+  function solve(slotIndex) {
+    if (solutions.length > 1) return;
+    if (slotIndex === slots.length) {
+      let isFinished = true;
+      for (let r = 0; r < Matrix.length; r++) {
+        for (let c = 0; c < Matrix[r].length; c++) {
+          if (Matrix[r][c] >= "0" && Matrix[r][c] <= "9") {
+            isFinished = false;
+            break;
+          }
+        }
+        if (!isFinished) break;
+      }
+
+      if (isFinished) {
+        let str = Matrix.map((row) => row.join("")).join("\n");
+        if (!uniqueGrids.has(str)) {
+          uniqueGrids.add(str);
+          solutions.push(Matrix.map((row) => [...row]));
+        }
+      }
+      return;
+    }
+
+  }
+  solve(0);
+
+  if (solutions.length !== 1) {
+    return "Error";
+  }
+
+  return solutions[0];
+}
+
 
 const words = ["casa", "alan", "ciao", "anta"];
 console.log(crosswordSolver(emptyPuzzle, words));
