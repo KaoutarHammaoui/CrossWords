@@ -2,6 +2,7 @@ const emptyPuzzle = `2001
 0..0
 1000
 0..0`
+
 function crosswordSolver(Puzzle,words){
     if (typeof Puzzle != "string" || Puzzle == ""){
         return "Error"
