@@ -105,24 +105,7 @@ function getWordLength(matrix, Y, X, direction) {
   return length;
 }
 
-function placeWord(matrix, Y, X, word, direction) {
-  let backup = [];
-  for (let i = 0; i < word.length; i++) {
-    let cy = direction === "vertical" ? Y + i : Y;
-    let cx = direction === "horizontal" ? X + i : X;
-    backup.push(matrix[cy][cx]);
-    if (matrix[cy][cx] !== "0" && matrix[cy][cx] !== word[i]) {
-      for (let k = 0; k < backup.length; k++) {
-        let ky = direction === "vertical" ? Y + k : Y;
-        let kx = direction === "horizontal" ? X + k : X;
-        matrix[ky][kx] = backup[k];
-      }
-      return false;
-    }
-    matrix[cy][cx] = word[i];
-  }
-  return backup; // return backup so Hicham can undo in the backtracking function
-}
+
 
 function removeWord(matrix, Y, X, backup, direction) {
   for (let i = 0; i < backup.length; i++) {
