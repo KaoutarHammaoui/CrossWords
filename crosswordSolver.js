@@ -1,8 +1,5 @@
-const emptyPuzzle = `2001
-0..0
-1000
-0..0`;
 
+/// The Main function
 function crosswordSolver(Puzzle, words) {
   if (typeof Puzzle != "string" || Puzzle == "") {
     return "Error";
@@ -21,7 +18,8 @@ function crosswordSolver(Puzzle, words) {
     return res;
   }
   res = res.map((row) => row.join("")).join("\n");
-  return res;
+  console.log(res);
+  //return res;
 }
 
 function CreateMatrix(puzzle) {
@@ -216,7 +214,3 @@ function CreateMatrixFromWords(Matrix, StartIndexesWords, words) {
 
   return solutions[0];
 }
-
-
-const words = ["casa", "alan", "ciao", "anta"];
-console.log(crosswordSolver(emptyPuzzle, words));
